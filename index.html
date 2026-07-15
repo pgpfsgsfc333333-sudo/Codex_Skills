@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>微伴侧边栏参数测试</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7f9;
+      color: #1f2937;
+    }
+
+    .panel {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .tip {
+      margin: 0 0 16px;
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .row {
+      margin-bottom: 12px;
+    }
+
+    .label {
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .value {
+      min-height: 20px;
+      padding: 10px;
+      word-break: break-all;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    button {
+      width: 100%;
+      height: 40px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .warn {
+      margin-top: 12px;
+      color: #b45309;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>微伴侧边栏参数测试</h1>
+    <p class="tip">
+      如果这里能显示 corp_id、code、origin，说明微伴已经把侧边栏参数传给这个页面了。
+      接下来复制 code，填到 Apifox 环境变量里测试 Code 校验接口。
+    </p>
+
+    <div class="row">
+      <div class="label">corp_id</div>
+      <div class="value" id="corp_id">读取中...</div>
+    </div>
+
+    <div class="row">
+      <div class="label">code</div>
+      <div class="value" id="code">读取中...</div>
+      <button onclick="copyCode()">复制 code</button>
+    </div>
+
+    <div class="row">
+      <div class="label">origin</div>
+      <div class="value" id="origin">读取中...</div>
+    </div>
+
+    <div class="row">
+      <div class="label">当前完整 URL</div>
+      <div class="value" id="full_url">读取中...</div>
+    </div>
+
+    <div class="warn">
+      注意：code 可能会过期。复制后请尽快回到 Apifox 调用“自定义侧边栏Code校验”接口。
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const corpId = params.get("corp_id") || "";
+    const code = params.get("code") || "";
+    const origin = params.get("origin") || "";
+
+    document.getElementById("corp_id").textContent = corpId || "没有收到 corp_id";
+    document.getElementById("code").textContent = code || "没有收到 code";
+    document.getElementById("origin").textContent = origin || "没有收到 origin";
+    document.getElementById("full_url").textContent = window.location.href;
+
+    function copyCode() {
+      if (!code) {
+        alert("当前页面没有 code");
+        return;
+      }
+
+      navigator.clipboard.writeText(code).then(function () {
+        alert("code 已复制");
+      }).catch(function () {
+        alert("复制失败，请手动复制 code");
+      });
+    }
+  </script>
+</body>
+</html>
